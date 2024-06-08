@@ -12,9 +12,15 @@ export class ListarImagenComponent implements OnInit {
   termino = '';
   subcription: Subscription;
   listadoImagenes: any[] = [];
+  loading = false;
+  page = 1;
+  perpage = 30
+  totalpage = 0;
+
   constructor(private _imagenService: ImagenService) {
     this.subcription = _imagenService.getTerminoBusqueda().subscribe(data => {
       this.termino = data;
+      this.page = 1;
       this.obtenerImagenes();
     })
   }
@@ -27,17 +33,32 @@ export class ListarImagenComponent implements OnInit {
   }
 
   obtenerImagenes() {
-    this._imagenService.getImagenes(this.termino).subscribe(data => {
+    this.loading = true;
+    this._imagenService.getImagenes(this.termino, this.page, this.perpage).subscribe(data => {
+      this.loading = false;
       if (data.hits.length === 0) {
         this._imagenService.setError('Opsssss... No se encontro ningun resultado');
         return;
       }
-      console.log(data);
+
+      this.totalpage = Math.ceil(data.totalHits / this.perpage);
+
       this.listadoImagenes = data.hits;
 
     }, error => {
+      this.loading = false;
       this._imagenService.setError('Opsss.. Ocurrio un error');
     })
+  }
+
+  addPage() {
+    this.page++;
+    this.obtenerImagenes();
+  }
+
+  subPage() {
+    this.page--;
+    this.obtenerImagenes();
   }
 
 }
