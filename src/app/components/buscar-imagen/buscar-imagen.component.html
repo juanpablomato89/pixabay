@@ -1,1 +1,18 @@
-<p>buscar-imagen works!</p>
+<div class="mt-4 p-5 -primary text-white rounded">
+  <form (ngSubmit)="buscarImagenes()">
+    <div class="row">
+      <div class="col-lg-8">
+        <input
+          type="text"
+          name="img"
+          class="form-control form-control-lg"
+          placeholder="Busca una Imagen"
+          [(ngModel)]="nombreImagen"
+        />
+      </div>
+      <div class="col-lg-4 d-grid gap-2">
+        <button type="submit" class="btn btn-primary">Buscar</button>
+      </div>
+    </div>
+  </form>
+</div>
